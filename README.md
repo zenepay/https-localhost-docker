@@ -34,27 +34,27 @@ DNS.3 = localhost
 ~~~
 
 Now generate locahost.key file with this command
-# Generate a private key
-# Choose a simple passphrase for your key. Enter it, re-enter it.
+### Generate a private key
+Choose a simple passphrase for your key. Enter it, re-enter it.
 ~~~sh
 openssl genrsa -out localhost.key -des3 2048
 ~~~
-# Generate certificate signing request using key.
-# Enter the passphrase that you chose for the key.
-# Choose defaults or enter information as appropriate.
-# Don't worry about entering anything for "challenge password"
+ -Generate certificate signing request using key.
+ -Enter the passphrase that you chose for the key.
+ -Choose defaults or enter information as appropriate.
+ Don't worry about entering anything for "challenge password"
 ~~~sh
 openssl req -new -key localhost.key -out localhost.csr
 ~~~
-# Use the passphrase that you chose for the CA KEY in Step 1.
+### Use the passphrase that you chose for the CA KEY in Step 1.
 ~~~sh
 openssl x509 -req -in localhost.csr -CA ../nginx-certs/ca.pem -CAkey ../nginx-certs/ca.key \
                   -CAcreateserial -days 3650 -sha256 \
                   -extfile localhost.ext -out ../nginx-certs/localhost.crt
 ~~~
 
-# Use the passphrase chosen for the localhost key,
-# which is NOT the same as the CA key.
+ Use the passphrase chosen for the localhost key,
+ which is NOT the same as the CA key.
 ~~~sh
 openssl rsa -in localhost.key -out localhost.decrypted.key
  ~~~
@@ -69,10 +69,14 @@ C:\Windows\System32\drivers\etc\hosts
 eg:
 
 127.0.0.1 kubernetes.docker.internal localhost mysql dev.localhost *.dev.localhost
-# Added by Docker Desktop
+### Added by Docker Desktop
+
+```
 192.168.1.111 host.docker.internal
 192.168.1.111 gateway.docker.internal
-# End of section
+```
+ 
+ End of section
 
 ### now create with docker compose
 ~~~sh
