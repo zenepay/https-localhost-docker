@@ -1,7 +1,6 @@
-!mariadb
 /mariadb/*
 /mysql/*
 mysqlbk
 .env
-nginx-certs/*
+nginx-certs/*.*
 

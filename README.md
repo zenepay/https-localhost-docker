@@ -1,3 +1,10 @@
+
+# Dev systems with docker for with ssl for local host
+This will make 3 docker images for:
+1. nginx to route url eg project1.dev.localhost where project1 is running ohter ports eg 8801
+2. mariadb database port 3306
+3. phpmyadmin to mange mariadb port: 8890
+
 ### Setup SSL on localhost
 ## Step 1: Generate a CA Certificate
 ~~~sh
@@ -11,7 +18,6 @@ cd ..
 ## Step 2: Generate Certificate, Signed By Our CA
 create file localhost.ext, if not yet exist here using this:
 ~~~sh
-mkdir resources
 cd resources
 touch localhost.ext
 ~~~
@@ -36,6 +42,7 @@ DNS.3 = localhost
 Now generate locahost.key file with this command
 ### Generate a private key
 Choose a simple passphrase for your key. Enter it, re-enter it.
+You are still in the resources folder
 ~~~sh
 openssl genrsa -out localhost.key -des3 2048
 ~~~
@@ -68,17 +75,19 @@ Click on the box that says â€œTrust this certificate for identifying websites.â€
 C:\Windows\System32\drivers\etc\hosts
 eg:
 
-127.0.0.1 kubernetes.docker.internal localhost mysql dev.localhost *.dev.localhost
-### Added by Docker Desktop
-
 ```
+127.0.0.1 kubernetes.docker.internal localhost mysql dev.localhost *.dev.localhost
+
 192.168.1.111 host.docker.internal
 192.168.1.111 gateway.docker.internal
 ```
  
- End of section
-
-### now create with docker compose
+## Step 5: create with docker compose
+create .env file
+```sh
+mv .env.example .env
+mkdir mariadb
+```
 ~~~sh
 docker compose up -d
 ~~~
