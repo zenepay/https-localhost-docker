@@ -1,8 +1,8 @@
 #!/bin/sh
 
 ME=$(basename $0)
-KEY=/etc/nginx/certs/server.key
-CERT=/etc/nginx/certs/server.pem
+KEY=/etc/nginx/certs/ca.key
+CERT=/etc/nginx/certs/ca.pem
 
 if [ -f $KEY ] && [ -f $CERT ]; then
     echo "$ME: Server certificate already exists, do nothing."

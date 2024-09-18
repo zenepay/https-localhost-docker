@@ -1,3 +1,4 @@
+ssl_password_file /etc/keys/global.pass;
 server {
     listen  80  default_server;
     listen [::]:80;
@@ -11,6 +12,7 @@ server {
 
     # Self signed certificates
     # Don't use them in a production server!
+
     ssl_certificate     /etc/nginx/certs/localhost.crt;
     ssl_certificate_key /etc/nginx/certs/localhost.key;
 
@@ -173,8 +175,5 @@ server {
         proxy_pass	http://host.docker.internal:8808;
     }
 }
-
-
-
 
 

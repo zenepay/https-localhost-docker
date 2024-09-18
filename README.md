@@ -9,18 +9,14 @@ This will make 3 docker images for:
 ## Step 1: Generate a CA Certificate
 ~~~sh
 mkdir nginx-certs
-cd ngin-xcerts
+cd nginx-certs
 openssl genrsa -out ca.key -des3 2048
 openssl req -x509 -sha256 -new -nodes -days 3650 -key ca.key -out ca.pem
 cd ..
 ~~~
 
 ## Step 2: Generate Certificate, Signed By Our CA
-create file localhost.ext, if not yet exist here using this:
-~~~sh
-cd resources
-touch localhost.ext
-~~~
+We already has resources/localhost.ext file, if not yet exist here please using this:
 ~~~conf
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -41,26 +37,25 @@ DNS.3 = localhost
 
 Now generate locahost.key file with this command
 ### Generate a private key
-Choose a simple passphrase for your key. Enter it, re-enter it.
+Choose a simple passphrase eg. NginXpass for your key. Enter it, re-enter it.
 You are still in the resources folder
 ~~~sh
 openssl genrsa -out localhost.key -des3 2048
 ~~~
  -Generate certificate signing request using key.
- -Enter the passphrase that you chose for the key.
- -Choose defaults or enter information as appropriate.
+ -Enter the passphrase eg. NginXpass that you chose for the key -Choose defaults or enter information as appropriate.
  Don't worry about entering anything for "challenge password"
 ~~~sh
 openssl req -new -key localhost.key -out localhost.csr
 ~~~
 ### Use the passphrase that you chose for the CA KEY in Step 1.
 ~~~sh
-openssl x509 -req -in localhost.csr -CA ../nginx-certs/ca.pem -CAkey ../nginx-certs/ca.key \
-                  -CAcreateserial -days 3650 -sha256 \
-                  -extfile localhost.ext -out ../nginx-certs/localhost.crt
+openssl x509 -req -in localhost.csr -CA ca.pem -CAkey ca.key \
+-CAcreateserial -days 3650 -sha256 \
+-extfile ../resources/localhost.ext -out localhost.crt
 ~~~
 
- Use the passphrase chosen for the localhost key,
+ Use the passphrase eg. NginXpass chosen for the localhost key,
  which is NOT the same as the CA key.
 ~~~sh
 openssl rsa -in localhost.key -out localhost.decrypted.key
@@ -81,13 +76,18 @@ eg:
 192.168.1.111 host.docker.internal
 192.168.1.111 gateway.docker.internal
 ```
- 
+## Step 5: edit global.pass
+Change your file /nginx/keys/global.pass eg. NginXpass by enter your passphase of the key created above
+
 ## Step 5: create with docker compose
 create .env file
 ```sh
+cd ..
 mv .env.example .env
 mkdir mariadb
 ```
+Now open Docker Desktop to let it start the service,
+after that run following to build the image
 ~~~sh
-docker compose up -d
+docker compose up
 ~~~
