@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../irapp"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../hrm"
+		},
+		{
+			"path": "../lineone-laravel"
+		}
+	],
+	"settings": {}
+}

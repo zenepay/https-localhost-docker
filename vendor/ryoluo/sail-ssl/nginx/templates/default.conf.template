@@ -1,0 +1,32 @@
+server {
+    listen  80  default_server;
+    server_name ${SERVER_NAME};
+
+    return  301 https://$host:${SSL_PORT}$request_uri;
+    #    location / {
+    #    proxy_set_header X-Real-IP $remote_addr;
+    #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #    proxy_set_header Host $host;
+    #    proxy_set_header X-Forwarded-Proto $scheme;
+    #    proxy_pass	http://${APP_SERVICE}:8000;
+    #}
+}
+
+server {
+    listen  443 ssl default_server;
+    server_name ${SERVER_NAME};
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/server.pem;
+    ssl_certificate_key /etc/nginx/certs/server.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://${APP_SERVICE}:8000;
+    }
+}
+

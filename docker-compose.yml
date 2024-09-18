@@ -1,0 +1,67 @@
+services:
+  nginx:
+    image: "nginx:latest"
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${SSL_PORT:-443}:443"
+    environment:
+      - "SSL_PORT=${SSL_PORT:-443}"
+      - "APP_SERVICE=${APP_SERVICE:-myservice}"
+      - "SERVER_NAME=${SERVER_NAME:-localhost}"
+    volumes:
+      - "./nginx-certs:/etc/nginx/certs"
+      - "./nginx/templates:/etc/nginx/templates"
+      - "./vendor/ryoluo/sail-ssl/nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh"
+    restart: always
+    networks:
+      - sail
+ 
+  mariadb:
+    image: mariadb:10.6.18
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MARIADB_ROOT_HOST: "%"
+      MARIADB_DATABASE: "uats1_db"
+      MARIADB_ROOT_USER: "${DB_USERNAME}"
+      MARIADB_USER: "${DB_USERNAME}"
+      MARIADB_PASSWORD: "${DB_PASSWORD}"
+      ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - "./mariadb:/var/lib/mysql"
+    networks:
+      - sail
+    restart: always
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - "-p${DB_PASSWORD}"
+      retries: 3
+      timeout: 5s
+  myadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "${FORWARD_MYADMIN_PORT:-8890}:8890"
+    volumes:
+      - "phpmyadmin:/var/www/html"
+    networks:
+      - sail
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+      - APACHE_HTTP_PORT_NUMBER=8890
+      - UPLOAD_LIMIT=300M
+    restart: always
+    command: '/bin/bash -c "sed -i \"s/80/$$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /docker-entrypoint.sh apache2-foreground"'
+
+networks:
+  sail:
+    driver: bridge
+    name: zen-network
+volumes:
+  phpmyadmin:
+    driver: local
+

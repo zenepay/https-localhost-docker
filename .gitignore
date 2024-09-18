@@ -1,0 +1,6 @@
+/mariadb/*
+/mysql/*
+mysqlbk
+.env
+nginx-certs/*
+
