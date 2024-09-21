@@ -1,5 +1,14 @@
 
 # Dev systems with docker for with ssl for local host
+
+## Installation
+```sh
+git clone https://github.com/zenepay/https-localhost-docker.git sail_share
+cd sail_share
+
+```
+
+
 This will make 3 docker images for:
 1. nginx to route url eg project1.dev.localhost where project1 is running ohter ports eg 8801
 2. mariadb database port 3306
