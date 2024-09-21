@@ -71,7 +71,7 @@ C:\Windows\System32\drivers\etc\hosts
 eg:
 
 ```
-127.0.0.1 kubernetes.docker.internal localhost mysql dev.localhost *.dev.localhost
+127.0.0.1 kubernetes.docker.internal localhost mariadb dev.localhost *.dev.localhost
 
 192.168.1.111 host.docker.internal
 192.168.1.111 gateway.docker.internal
@@ -79,7 +79,40 @@ eg:
 ## Step 5: edit global.pass
 Change your file /nginx/keys/global.pass eg. NginXpass by enter your passphase of the key created above
 
-## Step 5: create with docker compose
+## Step 6: edit default.conf.template
+Change server_name to the subdomain, you want
+Chage port to where the docker image is run eg port 8000
+proxy_pass	http://host.docker.internal:8000;
+```
+server {
+    listen  443 ssl;
+    server_name subdomain.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8000;
+    }
+}
+```
+## Step 7: set network of your docker project to the same
+Edit your docker-compose.yml on your docker project (not this project)
+must have network zen-network and external: true as below
+```
+networks:
+    sail:
+        driver: bridge
+        name: zen-network
+        external: true
+```
+## Step 8: create with docker compose
 create .env file
 ```sh
 cd ..

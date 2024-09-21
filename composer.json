@@ -1,0 +1,17 @@
+{
+    "name": "zenepay/https-local-docker",
+    "type": "project",
+    "description": "Dev evironment with nginx, mariadb, phpmyadmin and ssl cert for localhost",
+    "keywords": [
+        "https",
+        "nginx",
+        "mariadb",
+        "phpmyadmin",
+        "ssl",
+        "docker"
+    ],
+    "license": "MIT",
+    "require": {
+        "ryoluo/sail-ssl": "^1.3"
+    }
+}
