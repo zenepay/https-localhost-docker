@@ -8,6 +8,7 @@ services:
       - "SSL_PORT=${SSL_PORT:-443}"
       - "APP_SERVICE=${APP_SERVICE:-myservice}"
       - "SERVER_NAME=${SERVER_NAME:-localhost}"
+      - "SSL_DOMAIN=${SSL_DOMAIN:-localhost}"
     volumes:
       - "./nginx-certs:/etc/nginx/certs"
       - "./nginx/templates:/etc/nginx/templates"
@@ -42,6 +43,7 @@ services:
         - "-p${DB_PASSWORD}"
       retries: 3
       timeout: 5s
+    command: '/bin/bash -c "usermod -u 1000 mysql && groupmod -g 1000 mysql && /usr/bin/mysqld_safe --user=mysql"'
   myadmin:
     image: phpmyadmin:latest
     ports:
