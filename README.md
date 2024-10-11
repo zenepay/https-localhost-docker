@@ -21,7 +21,7 @@ mkdir nginx-certs
 cd nginx-certs
 openssl genrsa -out ca.key -des3 2048
 openssl req -x509 -sha256 -new -nodes -days 3650 -key ca.key -out ca.pem
-cd ..
+
 ~~~
 
 ## Step 2: Generate Certificate, Signed By Our CA

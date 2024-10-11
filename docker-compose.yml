@@ -13,7 +13,7 @@ services:
       - "./nginx-certs:/etc/nginx/certs"
       - "./nginx/templates:/etc/nginx/templates"
       - "./nginx/keys:/etc/keys"
-      - "./vendor/ryoluo/sail-ssl/nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh"
+      - "./nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh"
     restart: always
     networks:
       - sail

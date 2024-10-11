@@ -1,0 +1,15 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth, clientAuth
+subjectAltName = @alt_names
+[req]
+req_extensions = req_ext
+[req_distinguished_name]
+commonName_default = localhost
+[req_ext]
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = *.dev.localhost
+DNS.2 = dev.localhost
+DNS.3 = localhost
