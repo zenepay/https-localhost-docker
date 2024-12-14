@@ -1,4 +1,6 @@
 ssl_password_file /etc/keys/global.pass;
+ssl_certificate     /etc/nginx/certs/localhost.crt;
+ssl_certificate_key /etc/nginx/certs/localhost.key;
 server {
     listen  80  default_server;
     listen [::]:80;
@@ -8,20 +10,20 @@ server {
 }
 server {
     listen  443 ssl;
-    server_name localhost;
-
-    # Self signed certificates
-    # Don't use them in a production server!
+    server_name dev.localhost;
+    root /var/www/html;
 
     ssl_certificate     /etc/nginx/certs/localhost.crt;
     ssl_certificate_key /etc/nginx/certs/localhost.key;
 
     location / {
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass	http://host.docker.internal:8001;
+        index index.php index.html;
+    }
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
     }
 }
 
@@ -175,5 +177,64 @@ server {
         proxy_pass	http://host.docker.internal:8808;
     }
 }
+server {
+    listen  443 ssl;
+    server_name zenkit.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8802;
+    }
+}
+
+server {
+    listen  443 ssl;
+    server_name auth11.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    #ssl_certificate     /etc/nginx/certs/localhost.crt;
+    #ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8803;
+    }
+}
+ server {
+    listen  443 ssl;
+    server_name click.dev.localhost;
+    access_log off;
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        keepalive_timeout 90;
+        proxy_pass	http://host.docker.internal:8804;
+    }
+}
+
+
+
+
 
 

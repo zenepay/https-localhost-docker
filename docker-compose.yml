@@ -14,6 +14,18 @@ services:
       - "./nginx/templates:/etc/nginx/templates"
       - "./nginx/keys:/etc/keys"
       - "./nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh"
+      - "../:/var/www/html"
+    restart: always
+    networks:
+      - sail
+
+  php:
+    image: php:8.2-fpm-alpine
+    ports:
+      - "9001:9000"
+    volumes:
+      - "../:/var/www/html"
+      - ./logs/php.log:/var/log/fpm-php.www.log
     restart: always
     networks:
       - sail
@@ -30,6 +42,7 @@ services:
       MARIADB_USER: "${DB_USERNAME}"
       MARIADB_PASSWORD: "${DB_PASSWORD}"
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+
     volumes:
       - "./mariadb:/var/lib/mysql"
     networks:

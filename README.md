@@ -2,7 +2,16 @@
 # Dev systems with docker for with ssl for local host
 
 ## Installation
+In your home workspace eg
+/home
+/home/project1
+/home/project2
+
+We will clone our nginx call sail_share to home directory
+/home/sail_share
+
 ```sh
+cd /home
 git clone https://github.com/zenepay/https-localhost-docker.git sail_share
 cd sail_share
 
@@ -93,6 +102,26 @@ Change server_name to the subdomain, you want
 Chage port to where the docker image is run eg port 8000
 proxy_pass	http://host.docker.internal:8000;
 ```
+#for default local nginx hosting
+server {
+    listen  443 ssl;
+    server_name dev.localhost;
+    root /var/www/html;
+
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        index index.php index.html;
+    }
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    }
+}
+#for forward proxy hosint with docker or other ports
 server {
     listen  443 ssl;
     server_name subdomain.dev.localhost;
