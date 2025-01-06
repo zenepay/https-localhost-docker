@@ -94,6 +94,15 @@ eg:
 192.168.1.111 host.docker.internal
 192.168.1.111 gateway.docker.internal
 ```
+
+## Setp 4.1 set db host in wsl host file
+sh~~~
+sudo nano /etc/hosts
+~~~
+Add mysql and mariadb at line localhost
+~~~
+172.0.0.1 localhost mysql mariadb
+~~~
 ## Step 5: edit global.pass
 Change your file /nginx/keys/global.pass eg. NginXpass by enter your passphase of the key created above
 

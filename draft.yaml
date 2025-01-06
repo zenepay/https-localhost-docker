@@ -1,0 +1,139 @@
+models:
+  Company:
+    name: string
+    logo_path: string nullable
+    address: string nullable
+    phone: string nullable
+    email: string nullable
+    website: string nullable
+    tax_no: string:13
+    branch: string:20 nullable
+    relationships:
+      hasMany: Division, Employee, Department
+
+  Division:
+    name: string:100
+    code: string:10
+    company_id: id foreign
+    manager_id: id foreign:employees.id nullable
+    relationships:
+      belongsTo: Company, Employee:manager
+      hasMany: Department
+
+  Department:
+    name: string:100
+    code: string:10
+    type: string:20 nullable
+    company_id: id foreign
+    division_id: id foreign
+    manager_id: id foreign:employees.id nullable
+    description: text nullable
+    address: text nullable
+    relationships:
+      belongsTo: Division, Company, Employee:manager
+      hasMany: Employee
+
+  PositionLevel:
+    name: string:100
+    company_id: id foreign
+    level: decimal:2,1
+    purchase_quota: decimal:10,2
+    relationships:
+      belongsTo: Company
+      hasMany: Employee
+
+  Position:
+    name: string:100
+    position_level_id: id foreign nullable
+    relationships:
+      belongsTo: PositionLevel
+      hasMany: Employee
+
+  EmployeeStatus:
+    name: string:100
+    label_en: text nullable
+    label_th: text nullable
+    is_active: boolean default:true
+    relationships:
+      hasMany: Employee
+
+  Employee:
+    title_name: string:10 nullable
+    first_name: string:50
+    last_name: string:50
+    full_name: string:100 nullable
+    nick_name: string:30 nullable
+    first_name_th: string:50 nullable
+    last_name_th: string:50 nullable
+    nick_name_th: string:30 nullable
+    full_name_th: string:100 nullable
+    gender: string:10 nullable
+    birth_date: date nullable
+    email: string:100 unique
+    phone: string:255 nullable
+    phone_hash: string:255 nullable
+    national_id_no: string:255 nullable
+    national_id_no_hash: string:255 nullable
+    national_id_no_expiry_date: date nullable
+    passport_no: string:225 nullable
+    passport_no_expiry_date: date nullable
+    photo_path: string nullable
+    age: integer nullable
+    nationality: string:30 nullable
+    religion: string:20 nullable
+    marital_status: string:20 nullable
+    military_status: string:20 nullable
+    contact_person1_name: string:100 nullable
+    contact_person1_phone: string:255 nullable
+    contact_person1_relation: string:30 nullable
+    contact_person2_name: string:100 nullable
+    contact_person2_phone: string:255 nullable
+    contact_person2_relation: string:30 nullable
+    address_house_no: string:255 nullable
+    address_village: string:100 nullable
+    address_street: string nullable
+    address_subdistrict: string nullable
+    address_district: string nullable
+    address_city: string nullable
+    address_province: string:50 nullable
+    address_postcode: string:5 nullable
+    address_house_no_th: string:255 nullable
+    address_village_th: string:100 nullable
+    address_street_th: string nullable
+    address_subdistrict_th: string nullable
+    address_district_th: string nullable
+    address_city_th: string nullable
+    address_province_th: string:50 nullable
+    address_postcode_th: string:5 nullable
+    company_id: id foreign
+    division_id: id foreign nullable
+    department_id: id foreign nullable
+    supervisor_id: id foriegn:employees.id nullable
+    staff_no: string:20 nullable
+    como_code: string:20 nullable
+    position_id: id foreign nullable
+    workplace_id: id foreign nullable
+    start_date: date nullable
+    probation_days: integer default:120
+    pass_probation_date: date nullable
+    security_hospital: string:100 nullable
+    profident_fund_join_date: date nullable
+    profident_fund_leave_date: date nullable
+    status: string:20 nullable
+    onboarding_checklist: json nullable
+    tags: json nullable
+    updated_by_id: id foreign:users.id nullable
+    notify_to_hr: integer nullable
+    end_date: date nullable
+    is_rehired: boolean default:false
+    deleted_at: timestamp nullable
+    relationships:
+      belongsTo: Department, Division, Company, Employee:supervisor, Position, Workplace, User:updated_by
+
+
+
+
+seeders: Company, Division, Department, Position, Employee
+
+
+

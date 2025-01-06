@@ -16,6 +16,7 @@ services:
       - "./nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh"
       - "../:/var/www/html"
     restart: always
+    command: '/bin/bash -c "chmod +x /docker-entrypoint.d/99-generate-ssl-cert.sh"'
     networks:
       - sail
 
@@ -33,18 +34,17 @@ services:
   mariadb:
     image: mariadb:10.6.18
     ports:
-      - "${FORWARD_DB_PORT:-3306}:3306"
+      - "${DB_PORT:-3306}:${DB_PORT:-3306}"
     environment:
       MARIADB_ROOT_PASSWORD: "${DB_PASSWORD}"
       MARIADB_ROOT_HOST: "%"
-      MARIADB_DATABASE: "uats1_db"
+      MARIADB_DATABASE: "${DB_DATABASE}"
       MARIADB_ROOT_USER: "${DB_USERNAME}"
       MARIADB_USER: "${DB_USERNAME}"
       MARIADB_PASSWORD: "${DB_PASSWORD}"
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
-
     volumes:
-      - "./mariadb:/var/lib/mysql"
+      - "./mariadb:/var/lib/mysql:Z"
     networks:
       - sail
     restart: always
@@ -56,7 +56,6 @@ services:
         - "-p${DB_PASSWORD}"
       retries: 3
       timeout: 5s
-    command: '/bin/bash -c "usermod -u 1000 mysql && groupmod -g 1000 mysql && /usr/bin/mysqld_safe --user=mysql"'
   myadmin:
     image: phpmyadmin:latest
     ports:
@@ -68,7 +67,7 @@ services:
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mariadb
-      - APACHE_HTTP_PORT_NUMBER=8890
+      - APACHE_HTTP_PORT_NUMBER=${FORWARD_MYADMIN_PORT:-8890}
       - UPLOAD_LIMIT=300M
     restart: always
     command: '/bin/bash -c "sed -i \"s/80/$$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /docker-entrypoint.sh apache2-foreground"'
