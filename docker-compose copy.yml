@@ -16,8 +16,7 @@ services:
       - "../:/var/www/html"
     restart: always
 
-    #command: '/bin/bash -c "cp /etc/nginx/templates/generate-ssl-cert.sh /docker-entrypoint.d/"'
-
+    command: '/bin/bash -c "cp /etc/nginx/templates/99-generate-ssl-cert.sh /docker-entrypoint.d/99-generate-ssl-cert.sh && chmod +x /docker-entrypoint.d/99-generate-ssl-cert.sh"'
     networks:
       - sail
 
