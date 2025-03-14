@@ -228,6 +228,23 @@ server {
         proxy_pass	http://host.docker.internal:8803;
     }
 }
+server {
+    listen  443 ssl;
+    server_name auth12.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    #ssl_certificate     /etc/nginx/certs/localhost.crt;
+    #ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8803;
+    }
+}
  server {
     listen  443 ssl;
     server_name click.dev.localhost;
