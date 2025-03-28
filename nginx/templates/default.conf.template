@@ -108,7 +108,7 @@ server {
 
 server {
     listen  443 ssl;
-    server_name tanosuat.dev.localhost;
+    server_name tanos12.dev.localhost;
 
     # Self signed certificates
     # Don't use them in a production server!
