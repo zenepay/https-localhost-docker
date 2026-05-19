@@ -125,6 +125,24 @@ server {
 }
 server {
     listen  443 ssl;
+    server_name tanos12-bk.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8006;
+    }
+}
+
+server {
+    listen  443 ssl;
     server_name tanos54.dev.localhost;
 
     # Self signed certificates
@@ -141,23 +159,6 @@ server {
     }
 }
 
-server {
-    listen  443 ssl;
-    server_name ccsgv1.dev.localhost;
-
-    # Self signed certificates
-    # Don't use them in a production server!
-    ssl_certificate     /etc/nginx/certs/localhost.crt;
-    ssl_certificate_key /etc/nginx/certs/localhost.key;
-
-    location / {
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass	http://host.docker.internal:8006;
-    }
-}
 
 server {
     listen  443 ssl;
@@ -288,3 +289,46 @@ server {
         proxy_pass	http://host.docker.internal:8805;
     }
 }
+server {
+    listen  443 ssl;
+    server_name upstacks.dev.localhost *.upstacks.dev.localhost testco.upstacks.dev.localhost;
+    access_log off;
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        keepalive_timeout 90;
+        proxy_pass	http://host.docker.internal:8808;
+    }
+}
+server {
+    listen  443 ssl;
+    server_name nextapp.dev.localhost *.nextapp.dev.localhost riconnet.nextapp.dev.localhost;
+    access_log off;
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        keepalive_timeout 90;
+        proxy_pass	http://host.docker.internal:8810;
+    }
+}
+

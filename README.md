@@ -48,9 +48,10 @@ commonName_default = localhost
 [req_ext]
 subjectAltName = @alt_names
 [alt_names]
-DNS.1 = *.dev.localhost
-DNS.2 = dev.localhost
-DNS.3 = localhost
+DNS.1 = *.*.dev.localhost
+DNS.2 = *.dev.localhost
+DNS.3 = dev.localhost
+DNS.4 = localhost
 ~~~
 
 Now generate locahost.key file with this command
