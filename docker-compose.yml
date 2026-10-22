@@ -26,7 +26,7 @@ services:
     ports:
       - "9001:9000"
     volumes:
-      - "../:/var/www/html"
+      - "./html:/var/www/html"
       - ./logs/php.log:/var/log/fpm-php.www.log
     restart: always
     networks:
@@ -77,6 +77,19 @@ services:
     ports:
       - '${FORWARD_MAILPIT_PORT:-1025}:1025'
       - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'sail-redis:/data'
+    networks:
+      - sail
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+    restart: always
 networks:
   sail:
     driver: bridge
@@ -84,5 +97,7 @@ networks:
     external: true
 volumes:
   phpmyadmin:
+    driver: local
+  sail-redis:
     driver: local
 

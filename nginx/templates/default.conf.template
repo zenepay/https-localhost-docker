@@ -143,7 +143,7 @@ server {
 
 server {
     listen  443 ssl;
-    server_name tanos54.dev.localhost;
+    server_name cportal.dev.localhost;
 
     # Self signed certificates
     # Don't use them in a production server!
@@ -192,7 +192,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass	http://host.docker.internal:8808;
+        proxy_pass	http://host.docker.internal:8813;
     }
 }
 server {
@@ -331,4 +331,121 @@ server {
         proxy_pass	http://host.docker.internal:8810;
     }
 }
+server {
+    listen  443 ssl;
+    server_name linecrm.dev.localhost *.linecrm.dev.localhost;
+    access_log off;
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
 
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        keepalive_timeout 90;
+        proxy_pass	http://host.docker.internal:8811;
+    }
+}
+
+server {
+    listen  443 ssl;
+    server_name click13.dev.localhost *.click13.dev.localhost;
+    access_log off;
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        keepalive_timeout 90;
+        proxy_pass	http://host.docker.internal:8812;
+    }
+}
+
+server {
+    listen  443 ssl;
+    server_name irapp13.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8814;
+    }
+}
+server {
+    listen  443 ssl;
+    server_name thenext13.dev.localhost *.thenext13.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+    client_max_body_size 100M;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        keepalive_timeout 90;
+        proxy_pass	http://host.docker.internal:8815;
+    }
+}
+server {
+    listen  443 ssl;
+    server_name thegift13.dev.localhost *.thegift13.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8816;
+    }
+}
+
+server {
+    listen  443 ssl;
+    server_name eshopmemgate.dev.localhost *.eshopmemgate.dev.localhost;
+
+    # Self signed certificates
+    # Don't use them in a production server!
+    ssl_certificate     /etc/nginx/certs/localhost.crt;
+    ssl_certificate_key /etc/nginx/certs/localhost.key;
+
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass	http://host.docker.internal:8817;
+    }
+}
